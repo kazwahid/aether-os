@@ -150,7 +150,7 @@
 
 /* Left rail — anchored, no centering */
 .archLeft {
-  padding: 100px 56px 100px 56px;
+  padding: 80px 48px;
   border-right: 1px solid rgba(255,255,255,0.04);
   display: flex;
   flex-direction: column;
@@ -265,7 +265,6 @@
 .archRight {
   display: flex;
   flex-direction: column;
-  border-left: 1px solid rgba(255,255,255,0.04);
 }
 
 .passRow {
@@ -274,7 +273,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 40px 56px 40px 48px;
+  padding: 36px 48px 36px 36px;
   border-bottom: 1px solid rgba(255,255,255,0.04);
   transition: background 0.25s;
   position: relative;
@@ -285,15 +284,17 @@
 
 .passRowActive {
   border-left: 2px solid #ea3a00 !important;
-  padding-left: 46px;
+  padding-left: 34px !important;
   background: rgba(234,58,0,0.03) !important;
 }
 
-/* Two-line header: label on top, title below */
+/* Header: category label on left, technique title */
 .passRowTop {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
 }
 
 .passRowNum {
@@ -303,10 +304,11 @@
 /* Category label — prominent */
 .passRowLabel {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 10.5px;
   letter-spacing: 0.22em;
   color: #ea3a00;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 /* Technique name — large, white */
