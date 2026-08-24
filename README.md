@@ -69,6 +69,28 @@ npm run start
 
 ---
 
+## 🤖 AI Collaboration & Specific Breakdown
+
+This project was engineered in pair-programming collaboration with **Antigravity (Google DeepMind)**. Below is an exact technical breakdown of how AI tools were utilized:
+
+1. **GLSL Mathematics & Shader Synthesis**:
+   - *AI Role*: Generated initial Inigo Quilez cosine palette math structure and 4-octave Fractional Brownian Motion (fBm) loop equations.
+   - *Human Guidance & Modifications*: Rejected standard colorful/blue-magenta palettes in favor of a strict editorial Black/Orange/White palette (`#000000`, `#ea3a00`, `#ffffff`). Engineered the mouse coordinate attraction warp matrix with exponential decay ($e^{-d \cdot 4}$).
+
+2. **WebGL Lifecycle & Performance Hooks**:
+   - *AI Role*: Constructed the React lifecycle hook `useWebGLShader.ts` for WebGL context creation, shader compilation, and uniform location caching.
+   - *Human Guidance & Modifications*: Implemented `Math.min(window.devicePixelRatio, 2.0)` DPR caps, tab visibility sleep listeners (`visibilitychange`), and `prefers-reduced-motion` static single-frame draw calls.
+
+3. **Server-Side API Throttling & Protection**:
+   - *AI Role*: Authored the Token Bucket in-memory rate limiting class (`src/lib/rateLimiter.ts`) using TypeScript Map structures.
+   - *Human Guidance & Modifications*: Enforced capacity constraints (5 tokens per 30 seconds per IP), added automatic 30-minute stale record GC cleanup, and instituted server-side 800-character input validation.
+
+4. **Stream Error Resilience & Candidate Selection**:
+   - *AI Role*: Wrote initial Next.js API route stream handler using `@google/generative-ai`.
+   - *Human Guidance & Modifications*: Diagnosed 404 API model deprecation crashes, implemented a multi-model fallback sequence (`gemini-2.0-flash` ➔ `gemini-1.5-flash` ➔ `gemini-1.5-pro` ➔ `gemini-pro`), and added verified first-chunk iterator execution before returning stream headers.
+
+---
+
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for details.
