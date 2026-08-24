@@ -142,17 +142,17 @@
 /* ── ARCHITECTURE (merged section) ── */
 .arch {
   display: grid;
-  grid-template-columns: 35% 65%;
+  grid-template-columns: 36% 64%;
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   border-bottom: 1px solid rgba(255,255,255,0.04);
   align-items: stretch;
 }
 
 /* Left rail — anchored, spacious */
 .archLeft {
-  padding: 90px 56px;
+  padding: 90px 64px;
   border-right: 1px solid rgba(255,255,255,0.04);
   display: flex;
   flex-direction: column;
@@ -225,12 +225,11 @@
   flex-shrink: 0;
 }
 
-/* Inline SVG visualizer */
+/* Inline SVG visualizer — borderless & seamless */
 .vizBox {
   width: 100%;
-  background: #040404;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 4px;
+  background: transparent;
+  border: none;
   position: relative;
   overflow: hidden;
 }

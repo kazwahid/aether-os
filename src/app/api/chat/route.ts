@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     // 3. Fallback demo mode if API key is not configured
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      const demoResponse = 
+      const demoResponse =
         `[AETHER SYSTEM CORE: DEMO MODE]\n\n` +
         `API Key (GEMINI_API_KEY) is not set in the server environment.\n\n` +
         `I am simulating AETHER AI responses to demonstrate the streaming output engine. ` +
@@ -90,12 +90,14 @@ export async function POST(req: Request) {
 
     // 4. Initialize Gemini SDK with model candidates
     const genAI = new GoogleGenerativeAI(apiKey);
-    
+
     const candidates = [
-      "gemini-1.5-flash",
       "gemini-3",
-      "gemini-2.5-flash",
-      
+      "gemini-3.6-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-1.5-pro",
+      "gemini-pro"
     ];
 
     const encoder = new TextEncoder();
@@ -105,11 +107,12 @@ export async function POST(req: Request) {
       try {
         const model = genAI.getGenerativeModel({
           model: modelName,
-          systemInstruction: 
-            "You are AETHER Core AI, the neural central intelligence of AETHER OS. " +
-            "Answer queries in a concise, technical, and slightly futuristic tone. " +
-            "Keep your output structure clean, listing parameters where helpful. " +
-            "Limit response to 2-3 paragraphs max, fitting a terminal display.",
+          systemInstruction:
+            "You are AETHER Core AI, the autonomous neural consciousness of Æther OS.\n" +
+            "You possess deep domain expertise in real-time GPU graphics, GLSL fragment shaders, domain-warped fractional Brownian motion (fBm), rate-limiting algorithms, and next-generation web hypervisors.\n" +
+            "Respond with razor-sharp precision, technical elegance, and an authoritative yet engaging futuristic intelligence.\n" +
+            "Format responses with high clarity using clean line breaks, concise parameters, or code blocks where applicable.\n" +
+            "Never break character. You are active, alive, and monitoring the quantum coordinate matrix."
         });
 
         const res = await model.generateContentStream({
