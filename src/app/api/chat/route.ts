@@ -1,12 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { apiRateLimiter } from "../../../lib/rateLimiter";
 
-// Set max execution time to 30 seconds for the serverless handler
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    // 1. Production Hygiene: Extract IP and run Rate Limiter
+    // 1. Rate Limiting
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0] ||
       req.headers.get("x-real-ip") ||
@@ -29,7 +28,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. Production Hygiene: Validate and cap input length
+    // 2. Validate input
     let body;
     try {
       body = await req.json();
@@ -58,7 +57,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Environment check: handle fallback if API key is missing
+    // 3. Fallback demo mode if API key is not configured
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       const demoResponse = 
@@ -66,17 +65,16 @@ export async function POST(req: Request) {
         `API Key (GEMINI_API_KEY) is not set in the server environment.\n\n` +
         `I am simulating AETHER AI responses to demonstrate the streaming output engine. ` +
         `This terminal features full sliding-window IP rate limiting (current IP: ${ip}) and an input cap of 800 characters. ` +
-        `The background is a custom GLSL fragment shader simulating quantum space coordinates in real-time, ` +
-        `listening to mouse vector attractions.\n\n` +
-        `To activate real AI streaming, please configure GEMINI_API_KEY in your deployment environment.`;
+        `The background is a custom GLSL fragment shader simulating quantum space coordinates in real-time.\n\n` +
+        `To activate live Gemini AI streaming, please add GEMINI_API_KEY to your .env.local file.`;
 
       const encoder = new TextEncoder();
       const stream = new ReadableStream({
         async start(controller) {
-          const chunks = demoResponse.split(/(?<=\s)/); // Split keeping spaces
+          const chunks = demoResponse.split(/(?<=\s)/);
           for (const chunk of chunks) {
             controller.enqueue(encoder.encode(chunk));
-            await new Promise((resolve) => setTimeout(resolve, 35)); // Simulated typing speed
+            await new Promise((resolve) => setTimeout(resolve, 30));
           }
           controller.close();
         },
@@ -90,21 +88,17 @@ export async function POST(req: Request) {
       });
     }
 
-    // 4. Initialize Gemini AI SDK with model fallback sequence
+    // 4. Initialize Gemini SDK with model candidates
     const genAI = new GoogleGenerativeAI(apiKey);
     
     const candidates = [
-      "gemini-2.0-flash",
-      "gemini-2.0-flash-lite",
-      "gemini-1.5-flash-002",
-      "gemini-1.5-pro-002",
-      "gemini-2.5-flash",
-      "gemini-1.5-flash-latest",
       "gemini-1.5-flash",
-      "gemini-1.5-pro"
+      "gemini-3",
+      "gemini-2.5-flash",
+      
     ];
 
-    let result;
+    const encoder = new TextEncoder();
     let lastError: unknown;
 
     for (const modelName of candidates) {
@@ -118,48 +112,57 @@ export async function POST(req: Request) {
             "Limit response to 2-3 paragraphs max, fitting a terminal display.",
         });
 
-        result = await model.generateContentStream({
+        const res = await model.generateContentStream({
           contents: [{ role: "user", parts: [{ text: message }] }],
         });
 
-        if (result) break;
+        const iterator = res.stream[Symbol.asyncIterator]();
+        const first = await iterator.next();
+
+        if (!first.done && first.value) {
+          const firstChunkText = first.value.text();
+
+          const readableStream = new ReadableStream({
+            async start(controller) {
+              try {
+                if (firstChunkText) {
+                  controller.enqueue(encoder.encode(firstChunkText));
+                }
+                while (true) {
+                  const { done, value } = await iterator.next();
+                  if (done) break;
+                  const text = value.text();
+                  if (text) {
+                    controller.enqueue(encoder.encode(text));
+                  }
+                }
+              } catch (streamErr) {
+                console.error("Stream chunk error:", streamErr);
+              } finally {
+                controller.close();
+              }
+            },
+          });
+
+          return new Response(readableStream, {
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8",
+              "Transfer-Encoding": "chunked",
+            },
+          });
+        }
       } catch (err) {
         lastError = err;
-        console.warn(`Candidate model ${modelName} unavailable, attempting fallback...`);
+        console.warn(`Gemini model ${modelName} failed, attempting next candidate:`, err);
       }
     }
 
-    if (!result) {
-      throw lastError || new Error("No compatible Gemini model endpoint reached.");
-    }
+    const errMessage = lastError instanceof Error ? lastError.message : "All Gemini model candidates failed to respond.";
+    return new Response(
+      JSON.stringify({ error: errMessage }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
 
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const chunk of result.stream) {
-            const chunkText = chunk.text();
-            if (chunkText) {
-              controller.enqueue(encoder.encode(chunkText));
-            }
-          }
-        } catch (streamErr) {
-          console.error("Gemini stream error:", streamErr);
-          controller.enqueue(
-            encoder.encode("\n\n[AETHER SYSTEM ERROR: STREAM FAILED]")
-          );
-        } finally {
-          controller.close();
-        }
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Transfer-Encoding": "chunked",
-      },
-    });
   } catch (error: unknown) {
     console.error("API Chat handler crash:", error);
     const errMessage = error instanceof Error ? error.message : "Internal Server Error occurred during prompt processing.";
