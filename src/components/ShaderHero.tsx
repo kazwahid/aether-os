@@ -10,8 +10,7 @@ export function ShaderHero() {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const matches = mq.matches;
-    const t = setTimeout(() => setReducedMotion(matches), 0);
+    const t  = setTimeout(() => setReducedMotion(mq.matches), 0);
     const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
     mq.addEventListener("change", onChange);
     return () => { clearTimeout(t); mq.removeEventListener("change", onChange); };
@@ -24,55 +23,43 @@ export function ShaderHero() {
       {/* Full-bleed WebGL canvas */}
       <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
 
-      {/* Thin noise overlay — adds grain texture over canvas */}
+      {/* Grain noise overlay */}
       <div className={styles.noise} aria-hidden="true" />
 
-      {/* Edge-to-edge headline layout — left-anchored, NOT centered */}
+      {/* Left-rail content — bottom-anchored */}
       <div className={styles.content}>
-        {/* Top-left metadata strip */}
         <div className={styles.metaRow}>
           <span className={styles.sectionNum}>01</span>
           <span className={styles.metaDivider}>/</span>
           <span className={styles.metaLabel}>CORE INTERFACE</span>
         </div>
 
-        {/* Giant display headline spanning full width */}
         <h1 className={styles.headline}>
-          <span className={styles.headlineOrange}>ÆTHER</span>
+          <span className={styles.headlineOrange}>Æ</span>
+          <span className={styles.headlineWhite}>THER</span>
+          <br />
           <span className={styles.headlineWhite}>OS</span>
         </h1>
 
-        {/* Subline — left rail */}
         <p className={styles.subline}>
-          The neural web interface. Move your cursor — the quantum field bends.
+          A quantum neural interface.<br />
+          Move your cursor — the field bends around you.
         </p>
-
-        {/* Bottom row: CTA left, scroll signal right */}
-        <div className={styles.bottomRow}>
-          <a
-            href="#terminal"
-            className={styles.ctaButton}
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("aether-terminal-section")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            Initialize Console
-            <span className={styles.ctaArrow}>→</span>
-          </a>
-
-          <div className={styles.scrollHint}>
-            <span className={styles.scrollLabel}>SCROLL</span>
-            <span className={styles.scrollLine}></span>
-          </div>
-        </div>
       </div>
 
-      {/* Bottom-left coordinates — like dragonfly */}
-      <div className={styles.coords}>
-        <span>LAT 33.8688° N</span>
-        <span>LNG 151.2093° E</span>
+      {/* Bottom-right geo label */}
+      <div className={styles.coords} aria-hidden="true">
+        <span>33.8688° N</span>
+        <span>151.2093° E</span>
+      </div>
+
+      {/* Centered bottom scroll beacon */}
+      <div className={styles.scrollBeacon} aria-hidden="true">
+        <div className={styles.beaconRing} />
+        <div className={styles.beaconDot} />
+        <svg className={styles.beaconChevron} viewBox="0 0 16 8" fill="none">
+          <polyline points="2,2 8,6 14,2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </div>
     </section>
   );

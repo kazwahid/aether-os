@@ -3,133 +3,194 @@
 import { useEffect, useState } from "react";
 import styles from "./Showcase.module.css";
 
-const LOGS = [
-  "BINDING WEBGL CONTEXT — DRAW BUFFER ALLOCATED",
-  "COMPILING VERTEX SHADER STAGE [PASS]",
-  "COMPILING FRAGMENT SHADER — FBM_WARP [PASS]",
-  "LINKING PROGRAM — u_time · u_resolution · u_mouse",
-  "CLAMPING devicePixelRatio → MAX 2.0",
-  "visibilitychange LISTENER ATTACHED",
-  "MOUSE LERP FACTOR 0.08 — SMOOTH EASING ACTIVE",
-  "GARBAGE COLLECTION: PURGED STALE IP BUCKETS",
-  "TOKEN BUCKET CAPACITY: 5 | REFILL 1/6s",
-  "AETHER SYSTEM INTEGRITY: 100% OPERATIONAL",
+// What each shader pass does — shown as live "signal" cards
+const PASSES = [
+  {
+    id: "noise",
+    label: "PASS 01",
+    title: "Value Noise",
+    desc: "Hashes a 2D grid of random scalars, then smoothly interpolates between them — the raw building block of organic texture.",
+    live: "SAMPLING",
+  },
+  {
+    id: "fbm",
+    label: "PASS 02",
+    title: "fBm Stack",
+    desc: "Runs 4 noise passes at doubling frequency. Each halves its strength. The result is a naturalistic layered field — clouds, plasma, terrain.",
+    live: "4 OCTAVES",
+  },
+  {
+    id: "warp",
+    label: "PASS 03",
+    title: "Domain Warp",
+    desc: "Feeds the field back into itself — f(p + 4·f(p)). The coordinates distort the coordinates. This is what creates the folding, turbulent motion.",
+    live: "WARPING",
+  },
+  {
+    id: "mouse",
+    label: "PASS 04",
+    title: "Cursor Gravity",
+    desc: "Your cursor coordinates drive a 2D rotation matrix. The effect decays exponentially with distance — strongest near the pointer, invisible at the edge.",
+    live: "TRACKING",
+  },
 ];
 
-export function Showcase() {
-  const [activeLog, setActiveLog] = useState(0);
-  const [metrics, setMetrics] = useState({ cpu: 12.4, mem: 41.8, coh: 99.82 });
-
-  useEffect(() => {
-    const t = setInterval(() => setActiveLog(i => (i + 1) % LOGS.length), 2800);
-    return () => clearInterval(t);
-  }, []);
-
+// Simplified live telemetry — numbers that feel real but are cosmetic
+function useTick(base: number, amp: number, period: number, decimals = 1) {
+  const [val, setVal] = useState(base);
   useEffect(() => {
     const t = setInterval(() => {
-      const now = Date.now();
-      setMetrics({
-        cpu: parseFloat((12.4 + Math.sin(now / 2000) * 3.5).toFixed(1)),
-        mem: parseFloat((41.8 + Math.cos(now / 3000) * 0.4).toFixed(1)),
-        coh: parseFloat((99.8 + Math.sin(now / 1000) * 0.05).toFixed(2)),
-      });
-    }, 700);
+      setVal(parseFloat((base + Math.sin(Date.now() / period) * amp).toFixed(decimals)));
+    }, 600);
+    return () => clearInterval(t);
+  }, [base, amp, period, decimals]);
+  return val;
+}
+
+export function Showcase() {
+  const [activePass, setActivePass] = useState(0);
+  const fps   = useTick(60, 2, 1200, 0);
+  const ms    = useTick(16.4, 1.2, 900, 1);
+  const dpr   = 2.0;
+
+  // Auto-cycle through passes
+  useEffect(() => {
+    const t = setInterval(() => setActivePass(p => (p + 1) % PASSES.length), 3200);
     return () => clearInterval(t);
   }, []);
+
+  const pass = PASSES[activePass];
 
   return (
     <section id="hypervisor" className={styles.section}>
-      {/* Section header — same grid as page */}
+      {/* Section header */}
       <div className={styles.header}>
         <span className={styles.secNum}>03</span>
-        <h2 className={styles.title}>Hypervisor Monitor</h2>
+        <div className={styles.headerRight}>
+          <h2 className={styles.title}>Rendering Engine</h2>
+          <p className={styles.subtitle}>
+            Your hero section is drawn in real-time by a GLSL fragment shader —
+            a program running directly on the GPU every frame. Here is what it is doing right now.
+          </p>
+        </div>
       </div>
 
-      {/* Mock OS window */}
-      <div className={styles.window}>
-        {/* Window chrome */}
-        <div className={styles.chrome}>
-          <div className={styles.dots}>
-            <span /><span /><span />
-          </div>
-          <span className={styles.chromeTitle}>aether://kernel-monitor</span>
-          <span className={styles.latency}>0.14ms</span>
+      {/* Main layout: pass selector left | detail right | metrics far right */}
+      <div className={styles.body}>
+
+        {/* Pass tabs — left column */}
+        <div className={styles.passList}>
+          {PASSES.map((p, i) => (
+            <button
+              key={p.id}
+              className={`${styles.passTab} ${i === activePass ? styles.passTabActive : ""}`}
+              onClick={() => setActivePass(i)}
+            >
+              <span className={styles.passTabNum}>{p.label}</span>
+              <span className={styles.passTabTitle}>{p.title}</span>
+              {i === activePass && <span className={styles.passTabLive}>{p.live}</span>}
+            </button>
+          ))}
         </div>
 
-        {/* Three-column body */}
-        <div className={styles.body}>
-          {/* Sidebar nav */}
-          <nav className={styles.sidebar}>
-            {["Kernel Console", "Thread Manager", "Security Layer", "Shader Cache"].map(
-              (item, i) => (
-                <span key={item} className={`${styles.sideItem} ${i === 0 ? styles.sideActive : ""}`}>
-                  {item}
-                </span>
-              )
-            )}
-          </nav>
-
-          {/* Central visualizer */}
-          <div className={styles.main}>
-            {/* Dot-grid + SVG orbit */}
-            <div className={styles.orbitArea}>
-              <div className={styles.dotGrid} aria-hidden="true" />
-              <svg viewBox="0 0 200 200" className={styles.svg}>
-                <circle cx="100" cy="100" r="36" stroke="#ea3a00" strokeWidth="0.6" fill="none" strokeDasharray="4 4" className={styles.ring1} />
-                <circle cx="100" cy="100" r="58" stroke="rgba(234,58,0,0.3)" strokeWidth="0.4" fill="none" className={styles.ring2} />
-                <circle cx="100" cy="100" r="78" stroke="rgba(255,255,255,0.05)" strokeWidth="0.4" fill="none" />
-                <line x1="100" y1="100" x2="55"  y2="55"  stroke="#ea3a00" strokeWidth="0.6" />
-                <line x1="100" y1="100" x2="145" y2="55"  stroke="rgba(234,58,0,0.5)" strokeWidth="0.6" />
-                <line x1="100" y1="100" x2="100" y2="158" stroke="rgba(234,58,0,0.3)" strokeWidth="0.6" />
-                <circle cx="55"  cy="55"  r="2.5" fill="#ea3a00" />
-                <circle cx="145" cy="55"  r="2.5" fill="#ff4d1a" />
-                <circle cx="100" cy="158" r="2.5" fill="rgba(234,58,0,0.5)" />
-                <circle cx="100" cy="100" r="4"   fill="#fff" />
-              </svg>
-              <span className={styles.orbitLabel}>CORE NODE</span>
-            </div>
-
-            {/* Scrolling log strip */}
-            <div className={styles.logStrip}>
-              {LOGS.map((log, i) => (
-                <span key={i} className={`${styles.logLine} ${i === activeLog ? styles.logActive : ""}`}>
-                  <span className={styles.logPrefix}>&gt;_</span>{log}
-                </span>
+        {/* Detail panel — center */}
+        <div className={styles.detail}>
+          {/* Mini visualizer: animated SVG representing domain warp */}
+          <div className={styles.visualizer}>
+            <svg viewBox="0 0 240 160" className={styles.vizSvg}>
+              {/* Static grid lines */}
+              {[0,1,2,3,4,5].map(i => (
+                <line key={`h${i}`} x1="0" y1={i*32} x2="240" y2={i*32}
+                  stroke="rgba(255,255,255,0.03)" strokeWidth="0.5"/>
               ))}
+              {[0,1,2,3,4,5,6,7].map(i => (
+                <line key={`v${i}`} x1={i*40} y1="0" x2={i*40} y2="160"
+                  stroke="rgba(255,255,255,0.03)" strokeWidth="0.5"/>
+              ))}
+              {/* Animated warp curve — represents domain distortion */}
+              <path
+                d="M 0 80 C 40 40, 80 120, 120 80 S 200 40, 240 80"
+                stroke="#ea3a00"
+                strokeWidth="1"
+                fill="none"
+                opacity="0.6"
+                className={styles.vizCurve}
+              />
+              <path
+                d="M 0 80 C 60 110, 100 50, 140 80 S 210 110, 240 80"
+                stroke="rgba(234,58,0,0.3)"
+                strokeWidth="0.6"
+                fill="none"
+                className={styles.vizCurve2}
+              />
+              {/* Active pass indicator dot */}
+              <circle cx="120" cy="80" r="3" fill="#ea3a00" className={styles.vizDot}/>
+              <circle cx="120" cy="80" r="8" fill="none" stroke="#ea3a00"
+                strokeWidth="0.5" opacity="0.3" className={styles.vizRing}/>
+            </svg>
+            <span className={styles.vizLabel}>LIVE · {fps} FPS · {ms}ms</span>
+          </div>
+
+          {/* Active pass description */}
+          <div className={styles.passDetail}>
+            <div className={styles.passDetailHead}>
+              <span className={styles.passDetailNum}>{pass.label}</span>
+              <h3 className={styles.passDetailTitle}>{pass.title}</h3>
+            </div>
+            <p className={styles.passDetailDesc}>{pass.desc}</p>
+            <div className={styles.passDetailCode}>
+              {activePass === 0 && <code>{"fract(p * 127.1) · hash → mix(a,b,c,d)"}</code>}
+              {activePass === 1 && <code>{"for i in 4: v += amp * noise(p); p *= 2; amp *= 0.5"}</code>}
+              {activePass === 2 && <code>{"fbm(st + 4.0 * fbm(st + t))"}</code>}
+              {activePass === 3 && <code>{"mat2(cos θ, -sin θ, sin θ, cos θ) · exp(-d·4)"}</code>}
+            </div>
+          </div>
+        </div>
+
+        {/* Metrics column — right */}
+        <div className={styles.metrics}>
+          <span className={styles.metricsLabel}>RUNTIME</span>
+
+          <div className={styles.metricItem}>
+            <span className={styles.metricName}>FRAME</span>
+            <span className={styles.metricValue}>{ms}ms</span>
+            <div className={styles.metricBar}>
+              <div className={styles.metricBarFill} style={{ width: `${Math.min(ms / 33 * 100, 100)}%` }}/>
             </div>
           </div>
 
-          {/* Right telemetry column */}
-          <div className={styles.telemetry}>
-            <span className={styles.telLabel}>TELEMETRY</span>
-            {[
-              { name: "CPU ALLOC", val: metrics.cpu, max: 100, pct: metrics.cpu },
-              { name: "THREAD ALLOC", val: metrics.mem, max: 100, pct: metrics.mem },
-              { name: "COHERENCE", val: metrics.coh, max: 100, pct: (metrics.coh - 99) * 100 },
-            ].map(m => (
-              <div key={m.name} className={styles.metric}>
-                <div className={styles.metricTop}>
-                  <span>{m.name}</span>
-                  <span className={styles.metricVal}>{m.val}%</span>
-                </div>
-                <div className={styles.bar}>
-                  <div className={styles.barFill} style={{ width: `${Math.min(m.pct, 100)}%` }} />
-                </div>
-              </div>
-            ))}
-
-            <div className={styles.metaGrid}>
-              <span className={styles.metaKey}>TEMP</span>
-              <span className={styles.metaValOrange}>34°C</span>
-              <span className={styles.metaKey}>DPR CAP</span>
-              <span>2.0×</span>
-              <span className={styles.metaKey}>SHADER</span>
-              <span>FBM_WARP</span>
+          <div className={styles.metricItem}>
+            <span className={styles.metricName}>FPS</span>
+            <span className={styles.metricValue}>{fps}</span>
+            <div className={styles.metricBar}>
+              <div className={styles.metricBarFill} style={{ width: `${Math.min(fps / 60 * 100, 100)}%` }}/>
             </div>
+          </div>
+
+          <div className={styles.metricItem}>
+            <span className={styles.metricName}>DPR CAP</span>
+            <span className={styles.metricValue}>{dpr}×</span>
+            <div className={styles.metricBar}>
+              <div className={styles.metricBarFill} style={{ width: "100%" }}/>
+            </div>
+          </div>
+
+          <div className={styles.metricDivider}/>
+
+          <div className={styles.staticMeta}>
+            <span className={styles.staticKey}>OCTAVES</span>
+            <span className={styles.staticVal}>4</span>
+            <span className={styles.staticKey}>UNIFORMS</span>
+            <span className={styles.staticVal}>3</span>
+            <span className={styles.staticKey}>PRECISION</span>
+            <span className={styles.staticVal}>MEDIUMP</span>
+            <span className={styles.staticKey}>PALETTE</span>
+            <span className={styles.staticValOrange}>COSINE</span>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
 export default Showcase;
