@@ -1,0 +1,244 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #050409;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.shaderCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Reduced motion CSS fallback: if prefers-reduced-motion is active, 
+   we can also apply a static gradient backdrop to the section in case WebGL is slow/disabled */
+@media (prefers-reduced-motion: reduce) {
+  .heroSection {
+    background: radial-gradient(circle at 50% 50%, #1e1135 0%, #050409 100%);
+  }
+}
+
+.heroOverlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 680px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.glassCard {
+  background: rgba(8, 6, 16, 0.45);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 48px;
+  box-shadow: 
+    0 10px 50px -10px rgba(0, 0, 0, 0.7),
+    0 0 40px 0 rgba(147, 51, 234, 0.06);
+  text-align: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+}
+
+.glassCard:hover {
+  border-color: rgba(147, 51, 234, 0.25);
+  box-shadow: 
+    0 15px 60px -10px rgba(0, 0, 0, 0.8),
+    0 0 50px 0 rgba(147, 51, 234, 0.12);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #06b6d4; /* Electric Cyan */
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+.title {
+  font-size: 54px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #d8b4fe; /* Luminous Lavender */
+  margin: 0 0 24px 0;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #cbd5e1; /* Soft gray */
+  margin: 0 0 36px 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(124, 58, 237, 0.55),
+    0 0 15px rgba(168, 85, 247, 0.2);
+  filter: brightness(1.1);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.secondaryButton:active {
+  transform: translateY(0);
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: 32px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.3s;
+}
+
+.scrollIndicator:hover {
+  opacity: 1;
+}
+
+.scrollText {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #94a3b8;
+}
+
+.scrollArrow {
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+.scrollArrow::before,
+.scrollArrow::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 11px;
+  width: 2px;
+  height: 12px;
+  background: #94a3b8;
+  border-radius: 1px;
+}
+
+.scrollArrow::before {
+  transform: rotate(-45deg);
+  transform-origin: bottom center;
+  left: 6px;
+}
+
+.scrollArrow::after {
+  transform: rotate(45deg);
+  transform-origin: bottom center;
+  left: 16deg; /* Wait, it should be pixels or alignment */
+  left: 14px;
+}
+
+/* Let's animate the arrow bounce */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.scrollArrow {
+  animation: bounce 2s infinite ease-in-out;
+}
+
+@media (max-width: 640px) {
+  .glassCard {
+    padding: 32px 24px;
+  }
+  .title {
+    font-size: 38px;
+  }
+  .subtitle {
+    font-size: 16px;
+  }
+  .actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}
