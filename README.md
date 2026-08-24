@@ -1,6 +1,6 @@
 # AETHER OS — The Neural Web Interface
 
-Aether OS is a premium digital masterpiece featuring a fullscreen, highly-interactive WebGL fragment shader hero landing page integrated with a production-grade AI central terminal. Built as a demonstration of high-performance client-side rendering and secure serverless backend engineering.
+Aether OS is a premium digital masterpiece featuring a fullscreen, highly-interactive WebGL fragment shader hero landing page integrated with a simulated system hypervisor and a production-grade AI terminal console. Built as a demonstration of high-performance client-side rendering, advanced UI layouts, and secure serverless backend engineering.
 
 ## 🚀 Key Features
 
@@ -10,9 +10,14 @@ Aether OS is a premium digital masterpiece featuring a fullscreen, highly-intera
 - **DPR Clamping**: Restricts resolution calculations to a maximum `devicePixelRatio` of `2.0`, protecting performance on Retina/4K displays.
 - **Visibility-Aware Sleep**: Pauses the rendering loop when the browser tab is hidden to save CPU and battery power.
 - **Reduced Motion Fallback**: Automatically terminates animation frames and renders a static, high-contrast frame for users with accessibility motion limits.
-- **High Readability**: High-contrast dark gradients and text drop-shadows guarantee maximum legibility of overlay content.
+- **High Readability**: Translucent navigation overlays, high-contrast dark gradients, and text drop-shadows guarantee maximum legibility of overlay content.
 
-### 2. Production AI Terminal (Assignment 2)
+### 2. Apple-style Hypervisor Showcase (Creative Addition)
+- **Interactive OS Telemetry**: Simulates a live operating system dashboard showing real-time CPU loads, thread allocations, and quantum coherence rates.
+- **Live Kernel Logs**: A background loop feeds kernel console events (e.g. shader compilations, IP purging, visibility checks) dynamically.
+- **Neural Visualizer**: Features a spinning SVG vector node diagram with radial gradients representing active core synchronization.
+
+### 3. Production AI Terminal (Assignment 2)
 - **Instant Local Commands**: CLI features instant local mock handlers for `help`, `about`, `system`, and `clear`.
 - **Gemini Streaming Route**: Stream queries to a Next.js API handler connecting to Gemini API (`gemini-2.5-flash`) via `ReadableStream` chunks.
 - **Sliding-Window Rate Limiter**: Strict IP throttling using a memory-optimized Token Bucket algorithm (5 requests per 30 seconds limit).
