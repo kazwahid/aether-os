@@ -94,12 +94,14 @@ export async function POST(req: Request) {
     const genAI = new GoogleGenerativeAI(apiKey);
     
     const candidates = [
+      "gemini-2.0-flash",
+      "gemini-2.0-flash-lite",
+      "gemini-1.5-flash-002",
+      "gemini-1.5-pro-002",
       "gemini-2.5-flash",
       "gemini-1.5-flash-latest",
-      "gemini-1.5-pro-latest",
       "gemini-1.5-flash",
-      "gemini-1.5-pro",
-      "gemini-pro"
+      "gemini-1.5-pro"
     ];
 
     let result;
