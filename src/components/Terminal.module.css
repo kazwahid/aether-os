@@ -3,15 +3,18 @@
 }
 
 .frame {
-  border: 1px solid rgba(255,255,255,0.07);
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.08);
   background: #020202;
   overflow: hidden;
   cursor: text;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
 }
 
 .frame:hover {
-  border-color: rgba(234,58,0,0.3);
+  border-color: rgba(234,58,0,0.35);
+  box-shadow: 0 24px 60px rgba(234, 58, 0, 0.05);
 }
 
 /* Window chrome */
@@ -19,8 +22,8 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 12px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   background: #040404;
 }
 
@@ -43,9 +46,9 @@
 .chromeTitle {
   flex: 1;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: #2a2a2a;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: #5a5a5a;
 }
 
 .statusBadge {
@@ -74,20 +77,20 @@
 
 /* Terminal body — scroll area */
 .body {
-  padding: 24px 28px;
+  padding: 28px 36px;
 }
 
 .log {
-  min-height: 260px;
-  max-height: 380px;
+  min-height: 320px;
+  max-height: 460px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 24px;
   font-family: var(--font-mono);
-  font-size: 12.5px;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.6;
   scrollbar-width: thin;
   scrollbar-color: #1a1a1a transparent;
 }

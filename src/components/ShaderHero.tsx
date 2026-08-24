@@ -37,7 +37,7 @@ export function ShaderHero() {
         </h1>
 
         <p className={styles.subline}>
-          Move your cursor — the field bends around you.
+          A quantum interface. Move your cursor - the field bends around you.
         </p>
       </div>
 
@@ -47,7 +47,7 @@ export function ShaderHero() {
         <span>151.2093° E</span>
       </div>
 
-      {/* Scroll beacon — simple orange chevron, no animation rings */}
+      {/* Scroll beacon  */}
       <div className={styles.scrollBeacon} aria-hidden="true">
         <svg viewBox="0 0 24 14" fill="none" className={styles.chevron}>
           <polyline

@@ -192,7 +192,7 @@ export default function Home() {
           <div className={styles.consoleHeader}>
             <h2 className={styles.consoleTitle}>Core Console</h2>
             <p className={styles.consoleDesc}>
-              Ask anything about Æther OS, WebGL shaders, or system architecture.
+              Ask anything.
             </p>
           </div>
           <Terminal />

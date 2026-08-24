@@ -90,30 +90,45 @@ export async function POST(req: Request) {
       });
     }
 
-    // 4. Initialize Gemini AI SDK
+    // 4. Initialize Gemini AI SDK with model fallback sequence
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Using gemini-1.5-flash for maximum API key compatibility and fast streaming
-    let model;
-    try {
-      model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
-        systemInstruction: 
-          "You are AETHER Core AI, the neural central intelligence of AETHER OS. " +
-          "Answer queries in a concise, technical, and slightly futuristic tone. " +
-          "Keep your output structure clean, listing parameters where helpful. " +
-          "Limit response to 2-3 paragraphs max, fitting a terminal display.",
-      });
-    } catch {
-      model = genAI.getGenerativeModel({
-        model: "gemini-1.5-pro",
-      });
+    const candidates = [
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-pro-latest",
+      "gemini-1.5-flash",
+      "gemini-1.5-pro",
+      "gemini-pro"
+    ];
+
+    let result;
+    let lastError: unknown;
+
+    for (const modelName of candidates) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: 
+            "You are AETHER Core AI, the neural central intelligence of AETHER OS. " +
+            "Answer queries in a concise, technical, and slightly futuristic tone. " +
+            "Keep your output structure clean, listing parameters where helpful. " +
+            "Limit response to 2-3 paragraphs max, fitting a terminal display.",
+        });
+
+        result = await model.generateContentStream({
+          contents: [{ role: "user", parts: [{ text: message }] }],
+        });
+
+        if (result) break;
+      } catch (err) {
+        lastError = err;
+        console.warn(`Candidate model ${modelName} unavailable, attempting fallback...`);
+      }
     }
 
-    // 5. Generate and stream the content
-    const result = await model.generateContentStream({
-      contents: [{ role: "user", parts: [{ text: message }] }],
-    });
+    if (!result) {
+      throw lastError || new Error("No compatible Gemini model endpoint reached.");
+    }
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream({

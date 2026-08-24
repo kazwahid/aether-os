@@ -21,11 +21,13 @@ export function Terminal() {
   const [responding, setResponding] = useState(false);
   const [stream, setStream]    = useState("");
 
-  const endRef   = useRef<HTMLDivElement | null>(null);
+  const logRef   = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (logRef.current) {
+      logRef.current.scrollTop = logRef.current.scrollHeight;
+    }
   }, [history, stream]);
 
   const push = (type: Line["type"], text: string) =>
@@ -153,7 +155,7 @@ export function Terminal() {
 
       {/* Body */}
       <div className={styles.body}>
-        <div className={styles.log}>
+        <div className={styles.log} ref={logRef}>
           {history.map(l => (
             <div key={l.id} className={`${styles.line} ${styles[l.type]}`}>
               {l.text}
@@ -170,8 +172,6 @@ export function Terminal() {
               routing to core<span className={styles.pulseCursor}>▌</span>
             </div>
           )}
-
-          <div ref={endRef} />
         </div>
 
         <form onSubmit={handleSubmit} className={styles.promptRow}>
