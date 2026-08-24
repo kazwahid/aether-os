@@ -98,11 +98,11 @@
 .line { white-space: pre-wrap; word-break: break-word; }
 
 /* Line type colors — strictly black/orange/white system */
-.system  { color: #3a3a3a; }
-.user    { color: #ea3a00; }
+.system  { color: #8a8a8a; }
+.user    { color: #ea3a00; font-weight: 500; }
 .ai      { color: #ffffff; }
-.success { color: #6a6a6a; }
-.error   { color: #ff3b3b; }
+.success { color: #a0a0a0; }
+.error   { color: #ff4d1a; font-weight: 500; }
 
 /* Streaming cursor */
 .streamCursor {

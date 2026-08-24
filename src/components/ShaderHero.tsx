@@ -37,7 +37,7 @@ export function ShaderHero() {
         </h1>
 
         <p className={styles.subline}>
-          A quantum neural interface. Move your cursor — the field bends around you.
+          Move your cursor — the field bends around you.
         </p>
       </div>
 

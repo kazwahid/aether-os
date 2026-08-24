@@ -93,15 +93,22 @@ export async function POST(req: Request) {
     // 4. Initialize Gemini AI SDK
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Using gemini-2.5-flash for high performance and low streaming latency
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: 
-        "You are AETHER Core AI, the neural central intelligence of AETHER OS. " +
-        "Answer queries in a concise, technical, and slightly futuristic tone. " +
-        "Keep your output structure clean, listing parameters where helpful. " +
-        "Limit response to 2-3 paragraphs max, fitting a terminal display.",
-    });
+    // Using gemini-1.5-flash for maximum API key compatibility and fast streaming
+    let model;
+    try {
+      model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: 
+          "You are AETHER Core AI, the neural central intelligence of AETHER OS. " +
+          "Answer queries in a concise, technical, and slightly futuristic tone. " +
+          "Keep your output structure clean, listing parameters where helpful. " +
+          "Limit response to 2-3 paragraphs max, fitting a terminal display.",
+      });
+    } catch {
+      model = genAI.getGenerativeModel({
+        model: "gemini-1.5-pro",
+      });
+    }
 
     // 5. Generate and stream the content
     const result = await model.generateContentStream({
@@ -135,10 +142,11 @@ export async function POST(req: Request) {
         "Transfer-Encoding": "chunked",
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("API Chat handler crash:", error);
+    const errMessage = error instanceof Error ? error.message : "Internal Server Error occurred during prompt processing.";
     return new Response(
-      JSON.stringify({ error: "Internal Server Error occurred during prompt processing." }),
+      JSON.stringify({ error: errMessage }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }

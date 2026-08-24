@@ -358,49 +358,41 @@
   padding-top: 6px;
 }
 
-/* ── CONSOLE SECTION with large Æ behind ── */
+/* ── CONSOLE SECTION ── */
 .consoleSection {
   position: relative;
-  padding: 140px 56px 140px;
+  padding: 120px 24px;
   overflow: hidden;
   border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Giant Æ typemark — sits above, partially visible through the terminal */
-.aeMark {
-  position: absolute;
-  top: -0.05em;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-sans);
-  font-size: clamp(280px, 48vw, 700px);
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.05);
-  user-select: none;
-  pointer-events: none;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-/* Terminal sits in a generous left-anchored column */
+/* Centered, sleek, prominent console container */
 .consoleInner {
   position: relative;
   z-index: 2;
-  max-width: 1000px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .consoleHeader {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 44px;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  margin-bottom: 40px;
 }
 
 .consoleTitle {
   font-family: var(--font-sans);
-  font-size: clamp(36px, 5vw, 64px);
+  font-size: clamp(36px, 5vw, 56px);
   font-weight: 700;
   letter-spacing: -0.03em;
   color: #fff;
@@ -408,10 +400,11 @@
 }
 
 .consoleDesc {
-  font-size: 14px;
-  color: #6a6a6a;
+  font-size: 14.5px;
+  color: #9a9a9a;
   line-height: 1.6;
-  max-width: 520px;
+  max-width: 480px;
+  text-align: center;
 }
 
 .consoleDesc code {
@@ -434,23 +427,24 @@
 
 .footerLogo {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.18em;
-  color: #ea3a00;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1;
 }
 
 .footerMeta {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.07em;
-  color: #5a5a5a;   /* improved from #2a2a2a */
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: #8a8a8a;
 }
 
-.footerDot { color: #3a3a3a; }
+.footerDot { color: #4a4a4a; }
 
 .footerRule {
   height: 1px;
@@ -464,7 +458,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.16em;
-  color: #4a4a4a;   /* improved from #1a1a1a */
+  color: #7a7a7a;
 }
 
 /* ── RESPONSIVE ── */
