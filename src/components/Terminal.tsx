@@ -3,268 +3,154 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./Terminal.module.css";
 
-interface TerminalLine {
-  id: string;
-  type: "system" | "user" | "ai" | "error" | "success";
-  text: string;
-}
+interface Line { id: string; type: "system" | "user" | "ai" | "error" | "success"; text: string; }
+
+const BOOT: Line[] = [
+  { id: "b1", type: "system", text: "AETHER CORE v2.8.4 — SECURE CHANNEL ESTABLISHED" },
+  { id: "b2", type: "system", text: "TOKEN BUCKET ACTIVE — 5 REQUESTS / 30s PER IP" },
+  { id: "b3", type: "success", text: "Type 'help' for local protocols, or send any query to AETHER Core AI." },
+];
 
 export function Terminal() {
-  const [input, setInput] = useState("");
-  const [history, setHistory] = useState<TerminalLine[]>([
-    {
-      id: "init-1",
-      type: "system",
-      text: "AETHER CENTRAL CORE [v2.8.4-RELEASE] INITIALIZED.",
-    },
-    {
-      id: "init-2",
-      type: "system",
-      text: "SECURE TUNNEL OPENED VIA PORTAL 80-EDGE.",
-    },
-    {
-      id: "init-3",
-      type: "success",
-      text: "Type 'help' to review core command protocols or ask AETHER Core AI a direct question.",
-    },
-  ]);
-  const [isResponding, setIsResponding] = useState(false);
-  const [currentResponseStream, setCurrentResponseStream] = useState("");
+  const [input, setInput]   = useState("");
+  const [history, setHistory] = useState<Line[]>(BOOT);
+  const [responding, setResponding] = useState(false);
+  const [stream, setStream] = useState("");
 
-  const historyEndRef = useRef<HTMLDivElement | null>(null);
+  const endRef  = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // Auto scroll to bottom when history or active stream changes
-  useEffect(() => {
-    historyEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [history, currentResponseStream]);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [history, stream]);
 
-  // Focus input on terminal card click
-  const focusInput = () => {
-    inputRef.current?.focus();
-  };
+  const push = (type: Line["type"], text: string) =>
+    setHistory(p => [...p, { id: `${type}-${Date.now()}`, type, text }]);
 
-  const handleCommandSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const q = input.trim();
+    if (!q || responding) return;
 
-    const trimmedInput = input.trim();
-    if (!trimmedInput || isResponding) return;
-
-    // Save user command to history and clear input
-    const userLineId = `user-${Date.now()}`;
-    setHistory((prev) => [
-      ...prev,
-      { id: userLineId, type: "user", text: `aether@core:~$ ${trimmedInput}` },
-    ]);
+    push("user", `æ $ ${q}`);
     setInput("");
 
-    // Process local command protocols
-    const commandLower = trimmedInput.toLowerCase();
-    
-    if (commandLower === "clear") {
-      setHistory([]);
-      return;
+    switch (q.toLowerCase()) {
+      case "clear": setHistory([]); return;
+      case "help":
+        push("success",
+          "LOCAL PROTOCOLS:\n" +
+          "  help     — list commands\n" +
+          "  about    — shader and system specs\n" +
+          "  system   — runtime metrics\n" +
+          "  clear    — wipe buffer\n" +
+          "  [query]  — forward to AETHER Core AI"
+        ); return;
+      case "about":
+        push("success",
+          "AETHER OS SPECS:\n" +
+          "  Renderer  : Custom WebGL — 4-octave fBm domain warp\n" +
+          "  Palette   : Cosine gradient — black → charcoal → orange\n" +
+          "  Mouse     : Coordinate swirl via rotation matrix · exp(–d·4) decay\n" +
+          "  Fallback  : prefers-reduced-motion → static single frame\n" +
+          "  DPR cap   : 2.0 (GPU overhead bounded)\n" +
+          "  Backend   : Gemini 2.5 Flash · streaming ReadableStream"
+        ); return;
+      case "system":
+        push("system",
+          `RUNTIME STATUS:\n` +
+          `  VIEWPORT  : ${window.innerWidth}×${window.innerHeight}  DPR: ${Math.min(window.devicePixelRatio, 2).toFixed(1)}\n` +
+          `  RATE LIMIT: 5 req / 30s · refill 1/6s\n` +
+          `  INPUT CAP : 800 chars\n` +
+          `  STREAM    : ReadableStream · maxDuration 30s`
+        ); return;
     }
 
-    if (commandLower === "help") {
-      setHistory((prev) => [
-        ...prev,
-        {
-          id: `help-${Date.now()}`,
-          type: "success",
-          text: 
-            "AVAILABLE ENGINES:\n" +
-            "  help      - List active command protocols.\n" +
-            "  about     - Review AETHER OS background and WebGL rendering specs.\n" +
-            "  system    - Read simulated hardware allocation / rate limit stats.\n" +
-            "  clear     - Wipe terminal history buffer.\n" +
-            "  [query]   - Input any custom prompt to access the AETHER Core AI.",
-        },
-      ]);
-      return;
-    }
-
-    if (commandLower === "about") {
-      setHistory((prev) => [
-        ...prev,
-        {
-          id: `about-${Date.now()}`,
-          type: "success",
-          text:
-            "AETHER OS SPECS:\n" +
-            "  - Visual Core: Custom GLSL Fragment Shader utilizing domain-warped fBm noise.\n" +
-            "  - Interaction: Mouse vector attraction via uniform 'u_mouse'.\n" +
-            "  - Accessibility: Reduced-motion detection which disables animation updates.\n" +
-            "  - Architecture: React 19 / Next.js 16 Edge API integration.\n" +
-            "  - Rate Limiter: In-memory token bucket (5 tokens max, refills every 6s).",
-        },
-      ]);
-      return;
-    }
-
-    if (commandLower === "system") {
-      setHistory((prev) => [
-        ...prev,
-        {
-          id: `system-${Date.now()}`,
-          type: "system",
-          text:
-            `SYSTEM STATUS:\n` +
-            `  - WEBGL_DISPLAY : 100% OK\n` +
-            `  - RESOLUTION    : ${window.innerWidth}x${window.innerHeight} [dpr:${Math.min(window.devicePixelRatio, 2.0)}]\n` +
-            `  - RATE_LIMIT    : 5 queries / 30s window (Token Bucket Refill Active)\n` +
-            `  - INPUT_LIMIT   : Max 800 characters per transaction.`,
-        },
-      ]);
-      return;
-    }
-
-    // Trigger AI API stream request
-    setIsResponding(true);
-    setCurrentResponseStream("");
+    setResponding(true);
+    setStream("");
 
     try {
-      const response = await fetch("/api/chat", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmedInput }),
+        body: JSON.stringify({ message: q }),
       });
 
-      if (!response.ok) {
-        // Handle error payloads
-        const errorData = await response.json();
-        setHistory((prev) => [
-          ...prev,
-          {
-            id: `error-${Date.now()}`,
-            type: "error",
-            text: `SYSTEM HALT: ${errorData.error || "Unknown interface malfunction."}`,
-          },
-        ]);
-        setIsResponding(false);
+      if (!res.ok) {
+        const err = await res.json();
+        push("error", `SYSTEM HALT — ${err.error || "Unknown error"}`);
+        setResponding(false);
         return;
       }
 
-      // Stream handling
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      if (!reader) {
-        throw new Error("Failed to initialize response reader.");
+      const reader = res.body?.getReader();
+      const dec    = new TextDecoder();
+      if (!reader) throw new Error("No reader");
+
+      let acc = "";
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value);
+        setStream(acc);
       }
 
-      let done = false;
-      let accumulatedText = "";
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        if (value) {
-          const chunk = decoder.decode(value);
-          accumulatedText += chunk;
-          setCurrentResponseStream(accumulatedText);
-        }
-      }
-
-      // Once finished streaming, save the final reply to main history
-      setHistory((prev) => [
-        ...prev,
-        { id: `ai-${Date.now()}`, type: "ai", text: accumulatedText },
-      ]);
-      setCurrentResponseStream("");
-    } catch (err) {
-      console.error(err);
-      setHistory((prev) => [
-        ...prev,
-        {
-          id: `error-${Date.now()}`,
-          type: "error",
-          text: `INTERFACE FAILURE: Net connection broken or host unreachable.`,
-        },
-      ]);
+      push("ai", acc);
+      setStream("");
+    } catch {
+      push("error", "INTERFACE FAILURE — connection severed");
     } finally {
-      setIsResponding(false);
+      setResponding(false);
     }
   };
 
   return (
-    <section id="aether-terminal-section" className={styles.terminalSection}>
-      <div className={styles.sectionHeading}>
-        <h2 className={styles.secTitle}>Core Interface</h2>
-        <p className={styles.secDesc}>
-          Access the AETHER central intelligence terminal. Stream queries directly into the core matrix.
-        </p>
+    <div className={styles.frame} onClick={() => inputRef.current?.focus()} role="presentation">
+      {/* Window chrome */}
+      <div className={styles.chrome}>
+        <div className={styles.dots}><span /><span /><span /></div>
+        <span className={styles.chromeTitle}>aether://core-console</span>
+        <span className={styles.statusBadge}>ONLINE</span>
       </div>
 
-      <div className={styles.terminalFrame} onClick={focusInput} role="presentation">
-        {/* Terminal Header */}
-        <div className={styles.terminalHeader}>
-          <div className={styles.windowControls}>
-            <span className={styles.dotRed}></span>
-            <span className={styles.dotYellow}></span>
-            <span className={styles.dotGreen}></span>
-          </div>
-          <div className={styles.terminalTitle}>AETHER SYSTEM CONSOLE v2.8</div>
-          <div className={styles.statusIndicator}>
-            <span className={styles.statusDot}></span>
-            <span className={styles.statusText}>ONLINE</span>
-          </div>
-        </div>
+      {/* Terminal body */}
+      <div className={styles.body}>
+        <div className={styles.log}>
+          {history.map(l => (
+            <div key={l.id} className={`${styles.line} ${styles[l.type]}`}>{l.text}</div>
+          ))}
 
-        {/* Terminal Screen Buffer */}
-        <div className={styles.terminalBody}>
-          <div className={styles.historyLog}>
-            {history.map((line) => (
-              <div
-                key={line.id}
-                className={`${styles.logLine} ${styles[line.type]}`}
-              >
-                {line.text}
-              </div>
-            ))}
-
-            {/* Active streaming text from backend */}
-            {isResponding && currentResponseStream && (
-              <div className={`${styles.logLine} ${styles.ai}`}>
-                {currentResponseStream}
-                <span className={styles.streamingCursor}>█</span>
-              </div>
-            )}
-
-            {isResponding && !currentResponseStream && (
-              <div className={`${styles.logLine} ${styles.system}`}>
-                Estabilishing neural routing links...
-                <span className={styles.pulseCursor}>_</span>
-              </div>
-            )}
-
-            <div ref={historyEndRef} />
-          </div>
-
-          {/* Prompt Entry Form */}
-          <form onSubmit={handleCommandSubmit} className={styles.terminalPrompt}>
-            <span className={styles.promptSign}>aether@core:~$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value.slice(0, 800))} // Client-side character cap
-              disabled={isResponding}
-              placeholder={isResponding ? "System waiting for stream completion..." : "Enter command or system inquiry..."}
-              className={styles.promptInput}
-              autoComplete="off"
-              spellCheck="false"
-              maxLength={800}
-              aria-label="Aether Core command prompt input"
-            />
-            
-            {/* Input length and status badge */}
-            <div className={styles.charCounter}>
-              {input.length}/800
+          {responding && stream && (
+            <div className={`${styles.line} ${styles.ai}`}>
+              {stream}<span className={styles.streamCursor} />
             </div>
-          </form>
+          )}
+          {responding && !stream && (
+            <div className={`${styles.line} ${styles.system}`}>
+              Routing to core<span className={styles.pulseCursor}>_</span>
+            </div>
+          )}
+
+          <div ref={endRef} />
         </div>
+
+        <form onSubmit={handleSubmit} className={styles.promptRow}>
+          <span className={styles.promptSign}>æ $</span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={e => setInput(e.target.value.slice(0, 800))}
+            disabled={responding}
+            placeholder={responding ? "awaiting stream…" : "enter command or query"}
+            className={styles.promptInput}
+            autoComplete="off"
+            spellCheck="false"
+            maxLength={800}
+            aria-label="Aether Core console input"
+          />
+          <span className={styles.charCounter}>{input.length}/800</span>
+        </form>
       </div>
-    </section>
+    </div>
   );
 }
 export default Terminal;

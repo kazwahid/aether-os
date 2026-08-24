@@ -1,473 +1,310 @@
-.container {
+.root {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  background-color: #000000;
+  background: #000;
 }
 
-/* Translucent Sticky Navbar */
-.navbar {
+/* ─── NAV ────────────────────────────────────────────────── */
+.nav {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 64px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  z-index: 100;
-  display: flex;
+  height: 52px;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
-  padding: 0 24px;
-  box-sizing: border-box;
+  padding: 0 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
 }
 
-.navContainer {
-  width: 100%;
-  max-width: 1100px;
+.navLogo {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ea3a00;
+}
+
+.navLogoSub {
+  color: #fff;
+}
+
+.navCenter {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: 0.1em;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.logoSymbol {
-  color: #a855f7;
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-}
-
-.navLinks {
-  display: flex;
-  gap: 32px;
+  gap: 36px;
 }
 
 .navLink {
-  font-size: 13px;
-  color: #94a3b8;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: #5a5a5a;
+  text-transform: uppercase;
   transition: color 0.2s;
-  cursor: pointer;
 }
 
 .navLink:hover {
-  color: #ffffff;
+  color: #fff;
 }
 
-.navCta {
-  background: #ffffff;
-  color: #000000;
-  border: none;
-  padding: 8px 16px;
-  font-size: 12.5px;
-  font-weight: 700;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.navCta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
-  filter: brightness(0.95);
-}
-
-/* Bento Grid Specs Section */
-.bentoSection {
-  width: 100%;
-  padding: 100px 24px;
-  background-color: #000000;
+.navBadge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: #ea3a00;
+  justify-self: end;
   display: flex;
-  justify-content: center;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 10;
-  border-top: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.bentoContainer {
-  width: 100%;
-  max-width: 1100px;
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 6px;
 }
 
-.bentoHeader {
-  text-align: center;
-  max-width: 600px;
-  margin-bottom: 54px;
+.navBadge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ea3a00;
+  animation: pulseDot 2s ease-in-out infinite;
 }
 
-.bentoTag {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.25em;
-  color: #06b6d4;
-  margin-bottom: 12px;
-  text-transform: uppercase;
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
 }
 
-.bentoTitle {
-  font-size: 36px;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 16px 0;
-  letter-spacing: -0.02em;
+/* ─── STATEMENT (Section 02) ─────────────────────────────── */
+.statement {
+  padding: 120px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
-.bentoSubtitle {
-  font-size: 16px;
-  color: #64748b;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.bentoGrid {
+.statementInner {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: 80px 1fr;
+  gap: 0;
+  max-width: 1100px;
+}
+
+.statementNum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #ea3a00;
+  padding-top: 6px;
+}
+
+.statementText {
+  font-family: var(--font-sans);
+  font-size: clamp(22px, 3vw, 38px);
+  font-weight: 300;
+  line-height: 1.4;
+  color: #a0a0a0;
+  max-width: 820px;
+}
+
+.statementText em {
+  font-style: normal;
+  color: #fff;
+}
+
+/* ─── SPECS SECTION (Section 04) ─────────────────────────── */
+.specsSection {
+  padding: 120px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  max-width: 1100px;
+  margin: 0 auto;
   width: 100%;
 }
 
-.bentoCard {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 32px;
+.specsHeader {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0;
+  margin-bottom: 72px;
+}
+
+.secNum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #ea3a00;
+  padding-top: 6px;
+}
+
+.specsTitle {
+  font-family: var(--font-sans);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.specsList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s;
+  gap: 0;
 }
 
-.bentoCard:hover {
-  border-color: var(--card-border-hover);
-  transform: translateY(-2px);
+/* Each spec row — horizontal rule separated */
+.specRow {
+  display: grid;
+  grid-template-columns: 160px 1fr 160px;
+  gap: 32px;
+  padding: 40px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  align-items: start;
+  transition: background 0.2s;
 }
 
-.span2 {
-  grid-column: span 2;
+.specRow:hover {
+  background: rgba(234,58,0,0.02);
 }
 
-.cardHeader {
+.specLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: #3a3a3a;
+  padding-top: 4px;
+}
+
+.specContent {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 12px;
 }
 
-.cardIcon {
-  font-size: 18px;
-  color: #a855f7;
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
-}
-
-.cardHeader h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
+.specTitle {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
   letter-spacing: -0.01em;
 }
 
-.cardText {
+.specBody {
   font-size: 14px;
-  line-height: 1.6;
-  color: #94a3b8;
-  margin: 0;
+  line-height: 1.65;
+  color: #6a6a6a;
+  max-width: 520px;
 }
 
-.cardText code {
-  background: rgba(255, 255, 255, 0.04);
-  padding: 2px 6px;
-  border-radius: 4px;
+.specTag {
   font-family: var(--font-mono);
-  font-size: 12px;
-  color: #c084fc;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: #ea3a00;
+  justify-self: end;
+  padding-top: 4px;
+  border: 1px solid rgba(234,58,0,0.3);
+  padding: 4px 8px;
+  align-self: start;
 }
 
-/* Bento Card Decorative Sub-elements */
-
-/* 1. Glowing Orbs for Card 1 */
-.glowingOrbContainer {
-  position: absolute;
-  right: -20px;
-  bottom: -20px;
-  width: 150px;
-  height: 150px;
-  filter: blur(40px);
-  pointer-events: none;
-  opacity: 0.3;
-  transition: opacity 0.3s;
-}
-
-.bentoCard:hover .glowingOrbContainer {
-  opacity: 0.5;
-}
-
-.glowingOrbPurple {
-  width: 80px;
-  height: 80px;
-  background: #a855f7;
-  border-radius: 50%;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.glowingOrbCyan {
-  width: 80px;
-  height: 80px;
-  background: #06b6d4;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-/* 2. Vector Graph for Card 2 */
-.interactiveVectorGraph {
+/* ─── TERMINAL SECTION (Section 05) ──────────────────────── */
+.terminalWrapper {
+  padding: 120px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  max-width: 1100px;
+  margin: 0 auto;
   width: 100%;
-  height: 100px;
-  background: #050409;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.02);
-  position: relative;
-  overflow: hidden;
-  margin-top: auto;
-}
-
-.axisX {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.axisY {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 1px;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.vectorNode {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #06b6d4;
-  border-radius: 50%;
-  top: 35%;
-  left: 70%;
-  box-shadow: 0 0 10px #06b6d4;
-  animation: floatVector 4s infinite alternate ease-in-out;
-}
-
-@keyframes floatVector {
-  0% { top: 35%; left: 70%; }
-  100% { top: 65%; left: 60%; }
-}
-
-/* 3. Sleep Monitor Panel for Card 3 */
-.sleepMonitor {
-  width: 100%;
-  background: #050409;
-  border-radius: 8px;
-  padding: 12px;
   box-sizing: border-box;
+}
+
+.terminalHeader {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0;
+  margin-bottom: 16px;
+}
+
+.terminalTitle {
+  font-family: var(--font-sans);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.terminalDesc {
+  grid-column: 2;
+  font-size: 14px;
+  color: #5a5a5a;
+  margin-top: 12px;
+  margin-bottom: 48px;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+.footer {
+  padding: 48px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footerTop {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto;
+}
+
+.footerLogo {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #ea3a00;
+}
+
+.footerLinks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footerItem {
   font-family: var(--font-mono);
-  font-size: 11px;
-}
-
-.statusLabel {
-  color: #475569;
-}
-
-.statusValue {
-  color: #22c55e;
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
-}
-
-/* 4. Token array for Card 4 */
-.tokenVisualizer {
-  display: flex;
-  gap: 12px;
-  margin-top: auto;
-  padding: 12px;
-  background: #050409;
-  border-radius: 8px;
-  justify-content: center;
-}
-
-.tokenNode {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 10px #22c55e;
-  display: inline-block;
-  animation: pulseToken 2s infinite alternate;
-}
-
-.tokenNode:nth-child(2) { animation-delay: 0.3s; }
-.tokenNode:nth-child(3) { animation-delay: 0.6s; }
-.tokenNode:nth-child(4) { animation-delay: 0.9s; }
-.tokenNode:nth-child(5) { animation-delay: 1.2s; }
-
-@keyframes pulseToken {
-  0% { opacity: 0.3; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1.1); }
-}
-
-/* Architecture Documentation Section styling */
-.readmeSection {
-  width: 100%;
-  padding: 100px 24px;
-  background-color: #030206;
-  display: flex;
-  justify-content: center;
-  box-sizing: border-box;
-  border-top: 1px solid rgba(255, 255, 255, 0.03);
-  position: relative;
-  z-index: 10;
-}
-
-.readmeContent {
-  width: 100%;
-  max-width: 1100px;
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
-.readmeHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-  text-align: center;
-}
-
-.systemTag {
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.25em;
-  color: #a855f7;
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
-  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #3a3a3a;
 }
 
-.readmeTitle {
-  font-size: 32px;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.01em;
+.footerDot {
+  color: #2a2a2a;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-
-.card {
-  background: rgba(255, 255, 255, 0.01);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  padding: 32px;
+.footerBottom {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.card:hover {
-  border-color: rgba(168, 85, 247, 0.15);
-  transform: translateY(-2px);
-}
-
-.cardHeader {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.cardHeader h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
-.icon {
-  font-size: 20px;
-  color: #06b6d4;
-  text-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
-}
-
-.cardText {
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: #cbd5e1;
-  margin: 0;
-}
-
-.readmeFooter {
-  text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.03);
-  padding-top: 32px;
-  font-size: 10px;
-  font-weight: 800;
-  color: #475569;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9px;
   letter-spacing: 0.2em;
-  user-select: none;
+  color: #2a2a2a;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  padding-top: 16px;
 }
 
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 860px) {
-  .navbar {
-    padding: 0 16px;
+  .nav { padding: 0 24px; }
+  .navCenter { display: none; }
+  .statement, .specsSection, .terminalWrapper, .footer {
+    padding-left: 24px;
+    padding-right: 24px;
   }
-  .navLinks {
-    display: none; /* Hide nav links on mobile */
-  }
-  .bentoGrid {
+  .statementInner, .specsHeader, .terminalHeader {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
-  .span2 {
-    grid-column: span 1;
-  }
-  .bentoCard {
-    padding: 24px;
-  }
-  .grid {
+  .statementNum, .secNum { display: none; }
+  .specRow {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 12px;
   }
+  .specTag { justify-self: start; }
+  .footerTop { flex-direction: column; align-items: flex-start; gap: 16px; }
 }

@@ -1,244 +1,193 @@
-.heroSection {
+.hero {
   position: relative;
   width: 100%;
   height: 100vh;
-  min-height: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 640px;
+  background: #000;
   overflow: hidden;
-  background-color: #050409;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  align-items: flex-end;       /* anchor content to bottom-left */
 }
 
-.shaderCanvas {
+.canvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
   pointer-events: none;
 }
 
-/* Reduced motion CSS fallback: if prefers-reduced-motion is active, 
-   we can also apply a static gradient backdrop to the section in case WebGL is slow/disabled */
-@media (prefers-reduced-motion: reduce) {
-  .heroSection {
-    background: radial-gradient(circle at 50% 50%, #1e1135 0%, #050409 100%);
-  }
+/* Subtle noise texture overlay — CSS only, no PNG needed */
+.noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
 }
 
-.heroOverlay {
+/* Content sits in the bottom-left quadrant */
+.content {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 680px;
-  padding: 24px;
-  box-sizing: border-box;
-}
-
-.glassCard {
-  background: rgba(8, 6, 16, 0.45);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 48px;
-  box-shadow: 
-    0 10px 50px -10px rgba(0, 0, 0, 0.7),
-    0 0 40px 0 rgba(147, 51, 234, 0.06);
-  text-align: center;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
-}
-
-.glassCard:hover {
-  border-color: rgba(147, 51, 234, 0.25);
-  box-shadow: 
-    0 15px 60px -10px rgba(0, 0, 0, 0.8),
-    0 0 50px 0 rgba(147, 51, 234, 0.12);
-}
-
-.badge {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: #06b6d4; /* Electric Cyan */
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.2);
-  padding: 6px 14px;
-  border-radius: 100px;
-  margin-bottom: 24px;
-  text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
-}
-
-.title {
-  font-size: 54px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0 0 8px 0;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-}
-
-.subtitle {
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  color: #d8b4fe; /* Luminous Lavender */
-  margin: 0 0 24px 0;
-  text-transform: uppercase;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-.description {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #cbd5e1; /* Soft gray */
-  margin: 0 0 36px 0;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-}
-
-.actions {
+  padding: 0 48px 64px;
   display: flex;
-  gap: 16px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0;
 }
 
-.primaryButton {
-  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+/* Small metadata label row above headline */
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #5a5a5a;
+}
+
+.sectionNum {
+  color: #ea3a00;
+  font-weight: 700;
+}
+
+.metaDivider {
+  color: #333;
+}
+
+.metaLabel {
+  color: #5a5a5a;
+  text-transform: uppercase;
+}
+
+/* Edge-to-edge display headline */
+.headline {
+  font-family: var(--font-sans);
+  font-size: clamp(72px, 13vw, 200px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  display: flex;
+  gap: 0.12em;
+  margin-bottom: 32px;
+}
+
+.headlineOrange {
+  color: #ea3a00;
+}
+
+.headlineWhite {
   color: #ffffff;
-  border: none;
+}
+
+/* Single-line subline — left rail, controlled width */
+.subline {
+  font-family: var(--font-sans);
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 400;
+  color: #a0a0a0;
+  max-width: 420px;
+  line-height: 1.5;
+  margin-bottom: 48px;
+}
+
+/* Bottom row: button + scroll signal */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+/* Plain outlined CTA — no glow, no gradient */
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #ea3a00;
+  color: #ea3a00;
   padding: 14px 28px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background 0.2s, color 0.2s;
 }
 
-.primaryButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 25px rgba(124, 58, 237, 0.55),
-    0 0 15px rgba(168, 85, 247, 0.2);
-  filter: brightness(1.1);
+.ctaButton:hover {
+  background: #ea3a00;
+  color: #000;
 }
 
-.primaryButton:active {
-  transform: translateY(0);
+.ctaArrow {
+  font-size: 16px;
+  transition: transform 0.2s;
 }
 
-.secondaryButton {
-  background: rgba(255, 255, 255, 0.04);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 14px 28px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+.ctaButton:hover .ctaArrow {
+  transform: translateX(4px);
 }
 
-.secondaryButton:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+/* Scroll hint — word + line */
+.scrollHint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.secondaryButton:active {
-  transform: translateY(0);
+.scrollLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: #3a3a3a;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
-.scrollIndicator {
+.scrollLine {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, #3a3a3a 0%, transparent 100%);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Bottom-left geo coordinates — editorial detail */
+.coords {
   position: absolute;
-  bottom: 32px;
+  bottom: 28px;
+  right: 48px;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  opacity: 0.75;
-  transition: opacity 0.3s;
-}
-
-.scrollIndicator:hover {
-  opacity: 1;
-}
-
-.scrollText {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  color: #94a3b8;
-}
-
-.scrollArrow {
-  width: 24px;
-  height: 24px;
-  position: relative;
-}
-
-.scrollArrow::before,
-.scrollArrow::after {
-  content: "";
-  position: absolute;
-  top: 6px;
-  left: 11px;
-  width: 2px;
-  height: 12px;
-  background: #94a3b8;
-  border-radius: 1px;
-}
-
-.scrollArrow::before {
-  transform: rotate(-45deg);
-  transform-origin: bottom center;
-  left: 6px;
-}
-
-.scrollArrow::after {
-  transform: rotate(45deg);
-  transform-origin: bottom center;
-  left: 16deg; /* Wait, it should be pixels or alignment */
-  left: 14px;
-}
-
-/* Let's animate the arrow bounce */
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(6px);
-  }
-}
-
-.scrollArrow {
-  animation: bounce 2s infinite ease-in-out;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: #2a2a2a;
 }
 
 @media (max-width: 640px) {
-  .glassCard {
-    padding: 32px 24px;
+  .content {
+    padding: 0 24px 48px;
   }
-  .title {
-    font-size: 38px;
-  }
-  .subtitle {
-    font-size: 16px;
-  }
-  .actions {
+  .bottomRow {
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 24px;
   }
-  .primaryButton,
-  .secondaryButton {
-    width: 100%;
-  }
+  .coords { display: none; }
 }
