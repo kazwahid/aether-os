@@ -205,13 +205,11 @@ export default function Home() {
 
         <div className={styles.consoleInner}>
           <div className={styles.consoleHeader}>
-            <span className={styles.secNum}>04</span>
-            <div>
-              <h2 className={styles.consoleTitle}>Core Console</h2>
-              <p className={styles.consoleDesc}>
-                Ask anything. Local commands: <code>help</code> · <code>about</code> · <code>system</code> · <code>clear</code>
-              </p>
-            </div>
+            <h2 className={styles.consoleTitle}>Core Console</h2>
+            <p className={styles.consoleDesc}>
+              Streaming AI responses through a hardened edge function.
+              Ask anything about Æther OS, the shader, or the architecture.
+            </p>
           </div>
           <Terminal />
         </div>

@@ -10,7 +10,7 @@ export function ShaderHero() {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const t  = setTimeout(() => setReducedMotion(mq.matches), 0);
+    const t = setTimeout(() => setReducedMotion(mq.matches), 0);
     const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
     mq.addEventListener("change", onChange);
     return () => { clearTimeout(t); mq.removeEventListener("change", onChange); };
@@ -27,7 +27,7 @@ export function ShaderHero() {
         <div className={styles.metaRow}>
           <span className={styles.sectionNum}>01</span>
           <span className={styles.metaDivider}>/</span>
-          <span className={styles.metaLabel}>CORE INTERFACE</span>
+          <span className={styles.metaLabel}>INTERFACE</span>
         </div>
 
         {/* Single-line headline — ÆTHER OS */}

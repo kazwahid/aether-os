@@ -28,9 +28,9 @@
   grid-template-columns: 52px 1fr 52px;
   align-items: center;
   padding: 0 40px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(24px);
 }
 
 /* Just the Æ glyph */
@@ -38,7 +38,7 @@
   font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 700;
-  color: #ea3a00;
+  color: #ffffff;
   line-height: 1;
   cursor: default;
 }
@@ -53,44 +53,27 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.16em;
-  color: #3a3a3a;
+  color: #5a5a5a;
   text-transform: uppercase;
   cursor: pointer;
   transition: color 0.2s;
 }
 .navLink:hover { color: #fff; }
 
-/* INITIALIZE — text link with center-underline that vanishes on hover */
+/* INITIALIZE — plain text, no underline */
 .navInit {
   all: unset;
   cursor: pointer;
-  position: relative;
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.16em;
   color: #ea3a00;
-  padding-bottom: 3px;
   justify-self: end;
+  transition: opacity 0.2s;
 }
-
-/* Horizontal underline from center */
-.navInit::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 1px;
-  background: #ea3a00;
-  transition: width 0.35s cubic-bezier(0.16,1,0.3,1);
-  transform-origin: center;
-}
-
-/* Line disappears toward center on hover */
-.navInit:hover::after { width: 0%; }
+.navInit:hover { opacity: 0.6; }
 
 /* ── STATEMENT ── asymmetric, full-bleed left */
 .statement {
@@ -158,9 +141,10 @@
 /* ── ARCHITECTURE (merged section) ── */
 .arch {
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 36% 64%;
   width: 100%;
   border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: start;
 }
 
 /* Left rail — anchored, no centering */
@@ -193,8 +177,8 @@
 
 .archSubtitle {
   font-size: 14px;
-  line-height: 1.65;
-  color: #4a4a4a;
+  line-height: 1.7;
+  color: #8a8a8a;
   max-width: 340px;
   margin-bottom: 52px;
 }
@@ -227,7 +211,7 @@
   font-family: var(--font-mono);
   font-size: 8px;
   letter-spacing: 0.18em;
-  color: #2a2a2a;
+  color: #5a5a5a;
 }
 
 .archMetricDiv {
@@ -276,10 +260,11 @@
   color: #ea3a00;
 }
 
-/* Right rail — pass rows, touch the right edge */
+/* Right rail — pass rows, full height */
 .archRight {
   display: flex;
   flex-direction: column;
+  border-left: 1px solid rgba(255,255,255,0.04);
 }
 
 .passRow {
@@ -287,45 +272,50 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  padding: 36px 56px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  gap: 0;
+  padding: 40px 56px 40px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
   transition: background 0.25s;
   position: relative;
-}
-
-.passRow:hover { background: rgba(234,58,0,0.03); }
-
-.passRowActive {
-  border-left: 2px solid #ea3a00;
-  background: rgba(234,58,0,0.04) !important;
-}
-
-.passRowTop {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-}
-
-.passRowNum {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  color: #ea3a00;
-}
-
-.passRowLabel {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.16em;
-  color: #2a2a2a;
   flex: 1;
 }
 
+.passRow:hover { background: rgba(234,58,0,0.02); }
+
+.passRowActive {
+  border-left: 2px solid #ea3a00 !important;
+  padding-left: 46px;
+  background: rgba(234,58,0,0.03) !important;
+}
+
+/* Two-line header: label on top, title below */
+.passRowTop {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passRowNum {
+  display: none; /* hidden — label is enough */
+}
+
+/* Category label — prominent */
+.passRowLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: #ea3a00;
+  text-transform: uppercase;
+}
+
+/* Technique name — large, white */
 .passRowTitle {
   font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: #fff;
+  line-height: 1.1;
 }
 
 .passRowDetail {
@@ -342,19 +332,19 @@
 }
 
 .passRowBody {
-  font-size: 13px;
-  line-height: 1.7;
-  color: #5a5a5a;
-  max-width: 440px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #7a7a7a;
+  max-width: 480px;
 }
 
 .passRowCode {
   font-family: var(--font-mono);
   font-size: 10px;
   color: #ea3a00;
-  background: #0a0a0a;
-  border: 1px solid rgba(234,58,0,0.15);
-  padding: 8px 12px;
+  background: #080808;
+  border: 1px solid rgba(234,58,0,0.12);
+  padding: 10px 14px;
   display: block;
   letter-spacing: 0.04em;
 }
@@ -371,58 +361,57 @@
 /* ── CONSOLE SECTION with large Æ behind ── */
 .consoleSection {
   position: relative;
-  padding: 120px 0;
+  padding: 140px 56px 140px;
   overflow: hidden;
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
-/* Giant Æ typemark — decorative, like the dragon on dragonfly */
+/* Giant Æ typemark — sits above, partially visible through the terminal */
 .aeMark {
   position: absolute;
-  top: 50%;
+  top: -0.05em;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   font-family: var(--font-sans);
-  font-size: clamp(240px, 40vw, 600px);
+  font-size: clamp(280px, 48vw, 700px);
   font-weight: 700;
   letter-spacing: -0.06em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.05);
   user-select: none;
   pointer-events: none;
   line-height: 1;
   white-space: nowrap;
 }
 
+/* Terminal sits in a generous left-anchored column */
 .consoleInner {
   position: relative;
   z-index: 2;
-  max-width: 860px;
-  /* Left-offset — NOT centered */
-  margin: 0 0 0 10%;
-  padding: 0 40px;
+  max-width: 1000px;
 }
 
 .consoleHeader {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  gap: 0;
-  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 44px;
 }
 
 .consoleTitle {
   font-family: var(--font-sans);
-  font-size: clamp(28px, 4vw, 48px);
+  font-size: clamp(36px, 5vw, 64px);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: #fff;
-  margin-bottom: 10px;
+  line-height: 1;
 }
 
 .consoleDesc {
-  font-size: 13px;
-  color: #3a3a3a;
+  font-size: 14px;
+  color: #6a6a6a;
   line-height: 1.6;
+  max-width: 520px;
 }
 
 .consoleDesc code {
@@ -482,8 +471,9 @@
 @media (max-width: 960px) {
   .arch { grid-template-columns: 1fr; }
   .archLeft { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.04); padding: 60px 24px; }
-  .archRight .passRow { padding: 24px; }
-  .consoleInner { margin: 0; padding: 0 24px; }
+  .archRight { border-left: none; }
+  .passRow { padding: 24px 24px 24px 22px; }
+  .consoleSection { padding: 80px 24px; }
   .aeMark { font-size: clamp(120px, 30vw, 240px); }
 }
 
