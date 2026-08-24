@@ -220,7 +220,7 @@ export default function Home() {
             <span className={styles.footerDot}>·</span>
             <span>Vanilla WebGL</span>
             <span className={styles.footerDot}>·</span>
-            <span>Gemini 1.5 Flash</span>
+            <span>Gemini 3.6 Flash</span>
             <span className={styles.footerDot}>·</span>
             <span>Edge Runtime</span>
           </div>
