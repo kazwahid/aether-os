@@ -20,13 +20,9 @@ export function ShaderHero() {
 
   return (
     <section className={styles.hero}>
-      {/* Full-bleed WebGL canvas */}
       <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
-
-      {/* Grain noise overlay */}
       <div className={styles.noise} aria-hidden="true" />
 
-      {/* Left-rail content — bottom-anchored */}
       <div className={styles.content}>
         <div className={styles.metaRow}>
           <span className={styles.sectionNum}>01</span>
@@ -34,31 +30,41 @@ export function ShaderHero() {
           <span className={styles.metaLabel}>CORE INTERFACE</span>
         </div>
 
+        {/* Single-line headline — ÆTHER OS */}
         <h1 className={styles.headline}>
           <span className={styles.headlineOrange}>Æ</span>
-          <span className={styles.headlineWhite}>THER</span>
-          <br />
-          <span className={styles.headlineWhite}>OS</span>
+          <span className={styles.headlineWhite}>THER&nbsp;OS</span>
         </h1>
 
         <p className={styles.subline}>
-          A quantum neural interface.<br />
-          Move your cursor — the field bends around you.
+          A quantum neural interface. Move your cursor — the field bends around you.
         </p>
       </div>
 
-      {/* Bottom-right geo label */}
+      {/* Bottom-right geo */}
       <div className={styles.coords} aria-hidden="true">
         <span>33.8688° N</span>
         <span>151.2093° E</span>
       </div>
 
-      {/* Centered bottom scroll beacon */}
+      {/* Scroll beacon — simple orange chevron, no animation rings */}
       <div className={styles.scrollBeacon} aria-hidden="true">
-        <div className={styles.beaconRing} />
-        <div className={styles.beaconDot} />
-        <svg className={styles.beaconChevron} viewBox="0 0 16 8" fill="none">
-          <polyline points="2,2 8,6 14,2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <svg viewBox="0 0 24 14" fill="none" className={styles.chevron}>
+          <polyline
+            points="2,3 12,11 22,3"
+            stroke="#ea3a00"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <polyline
+            points="2,8 12,16 22,8"
+            stroke="#ea3a00"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.35"
+          />
         </svg>
       </div>
     </section>

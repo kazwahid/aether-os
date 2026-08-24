@@ -28,7 +28,7 @@
   mix-blend-mode: overlay;
 }
 
-/* ── Content rail ── */
+/* Bottom-left content rail */
 .content {
   position: relative;
   z-index: 2;
@@ -42,41 +42,41 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.2em;
 }
 
 .sectionNum  { color: #ea3a00; font-weight: 700; }
-.metaDivider { color: #2a2a2a; }
-.metaLabel   { color: #3a3a3a; text-transform: uppercase; }
+.metaDivider { color: #222; }
+.metaLabel   { color: #333; text-transform: uppercase; }
 
-/* ── Display headline ── */
+/* Single-line display headline */
 .headline {
   font-family: var(--font-sans);
-  font-size: clamp(80px, 15vw, 210px);
+  font-size: clamp(64px, 12vw, 180px);
   font-weight: 700;
-  line-height: 0.88;
+  line-height: 0.9;
   letter-spacing: -0.04em;
   text-transform: uppercase;
-  margin-bottom: 36px;
+  white-space: nowrap;
+  margin-bottom: 32px;
 }
 
 .headlineOrange { color: #ea3a00; }
-.headlineWhite  { color: #ffffff; }
+.headlineWhite  { color: #fff; }
 
-/* ── Subline ── */
 .subline {
   font-family: var(--font-sans);
-  font-size: clamp(13px, 1.3vw, 17px);
+  font-size: clamp(13px, 1.2vw, 16px);
   font-weight: 400;
-  color: #5a5a5a;
+  color: #4a4a4a;
   line-height: 1.6;
-  max-width: 360px;
+  max-width: 340px;
 }
 
-/* ── Geo coords ── */
+/* Geo coordinates */
 .coords {
   position: absolute;
   bottom: 32px;
@@ -92,65 +92,23 @@
   color: #1e1e1e;
 }
 
-/* ── Centered scroll beacon ── */
+/* Scroll beacon — center bottom, no pulsing */
 .scrollBeacon {
   position: absolute;
-  bottom: 36px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
 }
 
-/* Outer pulsing ring */
-.beaconRing {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid rgba(234, 58, 0, 0.3);
-  animation: beaconExpand 2.4s ease-out infinite;
-}
-
-/* Inner solid dot */
-.beaconDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ea3a00;
-  animation: beaconPulse 2.4s ease-in-out infinite;
-}
-
-/* Chevron arrow below */
-.beaconChevron {
-  width: 14px;
-  height: 8px;
-  color: #3a3a3a;
-  animation: beaconBounce 2.4s ease-in-out infinite;
-}
-
-@keyframes beaconExpand {
-  0%   { transform: translateX(-50%) scale(0.6); opacity: 0.8; }
-  100% { transform: translateX(-50%) scale(2.2); opacity: 0; }
-}
-
-@keyframes beaconPulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1; }
-}
-
-@keyframes beaconBounce {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  50%       { transform: translateY(3px); opacity: 1; }
+.chevron {
+  width: 22px;
+  height: 14px;
+  display: block;
 }
 
 @media (max-width: 640px) {
   .content  { padding: 0 24px 56px; }
+  .headline { white-space: normal; }
   .coords   { display: none; }
 }
