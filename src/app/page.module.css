@@ -2,30 +2,369 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: #050409;
+  background-color: #000000;
 }
 
-.readmeSection {
+/* Translucent Sticky Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.navContainer {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.logoSymbol {
+  color: #a855f7;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+
+.navLinks {
+  display: flex;
+  gap: 32px;
+}
+
+.navLink {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  color: #ffffff;
+}
+
+.navCta {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navCta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
+  filter: brightness(0.95);
+}
+
+/* Bento Grid Specs Section */
+.bentoSection {
   width: 100%;
   padding: 100px 24px;
-  background-color: #07060c;
+  background-color: #000000;
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.bentoContainer {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bentoHeader {
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 54px;
+}
+
+.bentoTag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: #06b6d4;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.bentoTitle {
+  font-size: 36px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.02em;
+}
+
+.bentoSubtitle {
+  font-size: 16px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.bentoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.bentoCard {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.bentoCard:hover {
+  border-color: var(--card-border-hover);
+  transform: translateY(-2px);
+}
+
+.span2 {
+  grid-column: span 2;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cardIcon {
+  font-size: 18px;
+  color: #a855f7;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+.cardHeader h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.cardText {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.cardText code {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #c084fc;
+}
+
+/* Bento Card Decorative Sub-elements */
+
+/* 1. Glowing Orbs for Card 1 */
+.glowingOrbContainer {
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 150px;
+  height: 150px;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+
+.bentoCard:hover .glowingOrbContainer {
+  opacity: 0.5;
+}
+
+.glowingOrbPurple {
+  width: 80px;
+  height: 80px;
+  background: #a855f7;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.glowingOrbCyan {
+  width: 80px;
+  height: 80px;
+  background: #06b6d4;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+/* 2. Vector Graph for Card 2 */
+.interactiveVectorGraph {
+  width: 100%;
+  height: 100px;
+  background: #050409;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  position: relative;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.axisX {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.axisY {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.vectorNode {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #06b6d4;
+  border-radius: 50%;
+  top: 35%;
+  left: 70%;
+  box-shadow: 0 0 10px #06b6d4;
+  animation: floatVector 4s infinite alternate ease-in-out;
+}
+
+@keyframes floatVector {
+  0% { top: 35%; left: 70%; }
+  100% { top: 65%; left: 60%; }
+}
+
+/* 3. Sleep Monitor Panel for Card 3 */
+.sleepMonitor {
+  width: 100%;
+  background: #050409;
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.statusLabel {
+  color: #475569;
+}
+
+.statusValue {
+  color: #22c55e;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+
+/* 4. Token array for Card 4 */
+.tokenVisualizer {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding: 12px;
+  background: #050409;
+  border-radius: 8px;
+  justify-content: center;
+}
+
+.tokenNode {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+  display: inline-block;
+  animation: pulseToken 2s infinite alternate;
+}
+
+.tokenNode:nth-child(2) { animation-delay: 0.3s; }
+.tokenNode:nth-child(3) { animation-delay: 0.6s; }
+.tokenNode:nth-child(4) { animation-delay: 0.9s; }
+.tokenNode:nth-child(5) { animation-delay: 1.2s; }
+
+@keyframes pulseToken {
+  0% { opacity: 0.3; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Architecture Documentation Section styling */
+.readmeSection {
+  width: 100%;
+  padding: 100px 24px;
+  background-color: #030206;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
   position: relative;
   z-index: 10;
 }
 
 .readmeContent {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   display: flex;
   flex-direction: column;
   gap: 48px;
 }
 
-.header {
+.readmeHeader {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -37,12 +376,12 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.25em;
-  color: #a855f7; /* Violet accent */
+  color: #a855f7;
   text-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
   text-transform: uppercase;
 }
 
-.title {
+.readmeTitle {
   font-size: 32px;
   font-weight: 800;
   color: #ffffff;
@@ -56,8 +395,8 @@
 }
 
 .card {
-  background: #030206;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   border-radius: 16px;
   padding: 32px;
   display: flex;
@@ -88,7 +427,7 @@
 
 .icon {
   font-size: 20px;
-  color: #06b6d4; /* Cyan accent */
+  color: #06b6d4;
   text-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
 }
 
@@ -99,29 +438,9 @@
   margin: 0;
 }
 
-.list {
-  margin: 0;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #cbd5e1;
-}
-
-.list code {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-family: ui-monospace, monospace;
-  color: #22d3ee;
-}
-
-.footer {
+.readmeFooter {
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
   padding-top: 32px;
   font-size: 10px;
   font-weight: 800;
@@ -131,14 +450,24 @@
 }
 
 @media (max-width: 860px) {
+  .navbar {
+    padding: 0 16px;
+  }
+  .navLinks {
+    display: none; /* Hide nav links on mobile */
+  }
+  .bentoGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .span2 {
+    grid-column: span 1;
+  }
+  .bentoCard {
+    padding: 24px;
+  }
   .grid {
     grid-template-columns: 1fr;
     gap: 24px;
-  }
-  .card {
-    padding: 24px;
-  }
-  .title {
-    font-size: 26px;
   }
 }
